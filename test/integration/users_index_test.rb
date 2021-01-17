@@ -27,4 +27,11 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path
     assert_select "a", text: "Delete", count: 0
   end
+
+  test "show only activated users on index page when logged in" do
+    log_in_as @non_admin
+    get users_path
+    assert_template "users/index"
+    assert User.where(activated: true)
+  end
 end
